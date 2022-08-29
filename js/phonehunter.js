@@ -66,9 +66,12 @@ const displayPhones = (data,dataLimit) => {
         showLessContainer.classList.remove('d-none')
     }
 
+    console.log(phones)
+
     phones.forEach(phone => {
         // console.log(phone)
-        const {brand,image,phone_name} = phone;
+        const {brand,image,phone_name,slug} = phone;
+        
         const divContent = document.createElement('div');
         divContent.classList.add('col');
         divContent.classList.add('rounded-lg');
@@ -80,6 +83,7 @@ const displayPhones = (data,dataLimit) => {
             <p class="card-text">
                 ${phone_name}
             </p>
+            <button onclick="loadPhoneDetail('${slug}')" class="text-light btn btn-dark">View Details</button>
             </div>
         </div>
         `;
@@ -91,6 +95,19 @@ const displayPhones = (data,dataLimit) => {
     // ** loader stopped here
     loaderToggler(false);
 };
+
+// ** loadPhoneDetail
+
+const loadPhoneDetail = async id => {
+    try {
+        const response = await fetch(` https://openapi.programming-hero.com/api/phone/${id}`);
+        response.ok ? console.log('Success') : console.log('Unsuccessful');
+        const data = await response.json();
+        console.log(data)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 // ** process search
 
