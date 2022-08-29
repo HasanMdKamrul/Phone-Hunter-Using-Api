@@ -54,12 +54,16 @@ const displayPhones = (data,dataLimit) => {
     // ** when search is clicked tokhon ami dataLimit onujaye data chai
 
     const showAllContainer = document.getElementById('show-all');
+    const showLessContainer = document.getElementById('show-less')
 
     if (phones.length > dataLimit) {
         phones = phones.slice(0,dataLimit);
         showAllContainer.classList.remove('d-none')
+        showLessContainer.classList.add('d-none')
+
     } else{
-        showAllContainer.classList.add('d-none')
+        showAllContainer.classList.add('d-none');
+        showLessContainer.classList.remove('d-none')
     }
 
     phones.forEach(phone => {
@@ -115,6 +119,10 @@ document.getElementById('button-addon2').addEventListener('click',()=>{
 
 document.getElementById('btn-show-all').addEventListener('click',()=>{
     processSearch(false);
+});
+
+document.getElementById('btn-show-less').addEventListener('click',()=>{
+    processSearch(true)
 })
 
-processSearch()
+// processSearch()
