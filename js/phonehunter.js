@@ -1,3 +1,10 @@
+// ** loader sppiner toggler
+
+const loaderToggler = isLoading =>{
+    const loader = document.getElementById('loader-section');
+    isLoading ?  loader.classList.remove('d-none') :  loader.classList.add('d-none');
+}
+
 // ** Load Phones data
 
 const loadPhonesData = async (search)=>{
@@ -8,6 +15,7 @@ const loadPhonesData = async (search)=>{
             const data = await response.json();
             displayPhones(data)
         } else {
+            loaderToggler(true)
             const response = await fetch(`https://openapi.programming-hero.com/api/phones?search=iPhone`);
             response.ok ? console.log('Successful') : console.log('Unsuccessful');
             const data = await response.json();
@@ -63,13 +71,18 @@ const displayPhones = data => {
 
         phonesContainer.appendChild(divContent);
 
-    })
+    });
+
+    // ** loader stopped here
+    loaderToggler(false);
 };
 
 
 // ** Search for the phones
 
 document.getElementById('button-addon2').addEventListener('click',()=>{
+    // ** loader starts here
+    loaderToggler(true);
     const searchText = document.getElementById('search-input').value;
     loadPhonesData(searchText);
     document.getElementById('search-input').value = '';
