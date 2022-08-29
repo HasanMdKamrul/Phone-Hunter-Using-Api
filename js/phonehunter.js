@@ -33,14 +33,20 @@ const displayPhones = data => {
 
     const {data:phones} = data;
 
-    phones.forEach(phone => {
+    // ** When no phones data found
+
+    // where to show no data found
+
+    const noDataContainer = document.getElementById('no-data');
+
+    phones.length === 0 ? noDataContainer.classList.remove('d-none') : noDataContainer.classList.add('d-none')
+
+    // ** Display phones only 10
+
+    phones.slice(0,10).forEach(phone => {
         // console.log(phone)
         const {brand,image,phone_name} = phone;
-
         const divContent = document.createElement('div');
-
-       
-
         divContent.classList.add('col');
         divContent.classList.add('rounded-lg');
         divContent.innerHTML = `
