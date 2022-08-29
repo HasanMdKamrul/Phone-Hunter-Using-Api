@@ -117,6 +117,15 @@ document.getElementById('button-addon2').addEventListener('click',()=>{
     processSearch(true)
 });
 
+// ** search-input field e enter key chaple data show korbe
+
+// ** Search input filed enter functionality
+
+document.getElementById('search-input').addEventListener('keypress', (event)=>{
+    event.key === 'Enter' && processSearch(true);
+})
+
+
 document.getElementById('btn-show-all').addEventListener('click',()=>{
     processSearch(false);
 });
@@ -125,4 +134,4 @@ document.getElementById('btn-show-less').addEventListener('click',()=>{
     processSearch(true)
 })
 
-// processSearch()
+processSearch()
