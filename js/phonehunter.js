@@ -83,7 +83,8 @@ const displayPhones = (data,dataLimit) => {
             <p class="card-text">
                 ${phone_name}
             </p>
-            <button onclick="loadPhoneDetail('${slug}')" class="text-light btn btn-dark">View Details</button>
+            <button data-bs-toggle="modal"
+            data-bs-target="#phoneDetails" onclick="loadPhoneDetail('${slug}')" class="text-light btn btn-dark">View Details</button>
             </div>
         </div>
         `;
@@ -103,10 +104,29 @@ const loadPhoneDetail = async id => {
         const response = await fetch(` https://openapi.programming-hero.com/api/phone/${id}`);
         response.ok ? console.log('Success') : console.log('Unsuccessful');
         const data = await response.json();
-        console.log(data)
+        displayPhoneDetail(data)
     } catch (error) {
         console.log(error)
     }
+};
+
+const displayPhoneDetail = phones => {
+    const {data} = phones;
+    console.log(data)
+    const {name,releaseDate,mainFeatures} = data;
+    
+    const {sensors,chipSet} = mainFeatures;
+
+    const title = document.getElementById('phoneDetailsLabel');
+    title.innerText = name;
+    const detailsContainer = document.getElementById('show-details');
+
+    detailsContainer.innerHTML = `
+    <h1>Chipset: ${mainFeatures ? chipSet : "No data found"}</h1>
+    <h2>ReleaseDate: ${data ? releaseDate : "No releaseDate found"}</h2>
+    <small class="text-info">Sensonrs: ${mainFeatures ? sensors.map(sensor => sensor): "No sensor found"} </small>
+    
+    `
 }
 
 // ** process search
