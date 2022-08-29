@@ -9,10 +9,18 @@ const loaderToggler = isLoading =>{
 
 const loadPhonesData = async (search,dataLimit)=>{
     try {
-        const response = await fetch(`https://openapi.programming-hero.com/api/phones?search=${search}`);
-        response.ok ? console.log('Successful') : console.log('Unsuccessful');
-        const data = await response.json();
-        displayPhones(data,dataLimit)
+        if (search) {
+            const response = await fetch(`https://openapi.programming-hero.com/api/phones?search=${search}`);
+            response.ok ? console.log('Successful') : console.log('Unsuccessful');
+            const data = await response.json();
+            displayPhones(data,dataLimit)
+        } else {
+            loaderToggler(true)
+            const response = await fetch(`https://openapi.programming-hero.com/api/phones?search=iPhone`);
+            response.ok ? console.log('Successful') : console.log('Unsuccessful');
+            const data = await response.json();
+            displayPhones(data)
+        }
         
     } catch (error) {
         console.log(error);
@@ -33,8 +41,6 @@ const displayPhones = (data,dataLimit) => {
 
     let {data:phones} = data;
 
-    
-
     // ** When no phones data found
 
     // where to show no data found
@@ -43,22 +49,21 @@ const displayPhones = (data,dataLimit) => {
 
     phones.length === 0 ? noDataContainer.classList.remove('d-none') : noDataContainer.classList.add('d-none')
 
-    // ** ShowAll button functinality
-
-    const showAllContainer = document.getElementById('show-all');
-    console.log(phones.length)
-
-    if (phones.length > 10 && dataLimit) {
-        phones = phones.slice(0,dataLimit);
-        showAllContainer.classList.remove('d-none');
-    } else{
-        showAllContainer.classList.add('d-none');
-    }
-    console.log("phones:",phones)
     // ** Display phones only 10
 
+    // ** when search is clicked tokhon ami dataLimit onujaye data chai
+
+    const showAllContainer = document.getElementById('show-all');
+
+    if (phones.length > dataLimit) {
+        phones = phones.slice(0,dataLimit);
+        showAllContainer.classList.remove('d-none')
+    } else{
+        showAllContainer.classList.add('d-none')
+    }
+
     phones.forEach(phone => {
-        console.log(phone)
+        // console.log(phone)
         const {brand,image,phone_name} = phone;
         const divContent = document.createElement('div');
         divContent.classList.add('col');
@@ -83,24 +88,33 @@ const displayPhones = (data,dataLimit) => {
     loaderToggler(false);
 };
 
+// ** process search
+
+const processSearch = (isSearching)=>{
+
+    if (isSearching) {
+        // ** loader starts here
+        loaderToggler(true);
+        const searchText = document.getElementById('search-input').value;
+        loadPhonesData(searchText,10);
+    } else if (isSearching === false) {
+        loaderToggler(true);
+        const searchText = document.getElementById('search-input').value;
+        loadPhonesData(searchText);
+    } else{
+        loadPhonesData();
+    }
+     
+}
 
 // ** Search for the phones
 
 document.getElementById('button-addon2').addEventListener('click',()=>{
-    // ** loader starts here
-    loaderToggler(true);
-    const searchText = document.getElementById('search-input').value;
-    loadPhonesData(searchText,20);
-    // document.getElementById('search-input').value = '';
+    processSearch(true)
 });
 
-// loadPhonesData();
-
-// ** showAll button
-
 document.getElementById('btn-show-all').addEventListener('click',()=>{
-    loaderToggler(true);
-    const searchText = document.getElementById('search-input').value;
-    loadPhonesData(searchText);
-    // document.getElementById('search-input').value = '';
+    processSearch(false);
 })
+
+processSearch()
